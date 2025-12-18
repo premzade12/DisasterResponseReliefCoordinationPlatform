@@ -43,11 +43,7 @@ if (!MONGO_URI) {
     process.exit(1);
 }
 
-// FIX: Removed deprecated options { useNewUrlParser: true, useUnifiedTopology: true }
-// amazonq-ignore-next-line
-// amazonq-ignore-next-line
-// amazonq-ignore-next-line
-// amazonq-ignore-next-line
+
 mongoose.connect(MONGO_URI)
 .then(() => console.log("✅ MongoDB Atlas Connected Successfully"))
 .catch(err => console.error("❌ MongoDB Connection Error:", err));
