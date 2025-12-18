@@ -5,6 +5,11 @@ from newspaper import Article
 from pymongo import MongoClient
 from datetime import datetime
 import ssl
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # --- 1. SSL FIX ---
 # This fixes "Certificate Verify Failed" errors when scraping
@@ -14,7 +19,11 @@ if hasattr(ssl, '_create_unverified_context'):
 # --- 2. CONFIGURATION ---
 
 # amazonq-ignore-next-line
-MONGO_URI = "mongodb+srv://premzade12:zadeprem1234@disasterresponse.poetiqv.mongodb.net/?retryWrites=true&w=majority&appName=DisasterResponse"
+MONGO_URI = os.getenv('MONGO_URI')
+
+if not MONGO_URI:
+    print('❌ MONGO_URI not found in environment variables')
+    exit(1)
 
 try:
     print("⏳ Connecting to MongoDB Cloud...")

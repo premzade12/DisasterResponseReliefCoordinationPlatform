@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '../.env' });
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -25,7 +26,7 @@ const upload = multer({ storage: storage });
 
 // Initialize App
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -34,8 +35,13 @@ app.use(bodyParser.json());
 // ---------------------------------------------------------
 // 1. DATABASE CONNECTION (MongoDB Atlas)
 // ---------------------------------------------------------
-// ACTION: Replace with your real User/Password
-const MONGO_URI = "mongodb+srv://premzade12:zadeprem1234@disasterresponse.poetiqv.mongodb.net/disaster_db?retryWrites=true&w=majority&appName=DisasterResponse";
+// Load MongoDB URI from environment variables
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+    console.error('❌ MONGO_URI not found in environment variables');
+    process.exit(1);
+}
 
 // FIX: Removed deprecated options { useNewUrlParser: true, useUnifiedTopology: true }
 // amazonq-ignore-next-line
