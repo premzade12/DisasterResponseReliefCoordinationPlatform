@@ -7,7 +7,10 @@ function UserPortal() {
   const [loading, setLoading] = useState(false);
   const [aiResult, setAiResult] = useState(null);
 
-  const handleFileChange = (e) => setSelectedFile(e.target.files[0]);
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+    setAiResult(null); // Clear previous AI result
+  };
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
@@ -18,24 +21,26 @@ function UserPortal() {
     setAiResult(null);
 
     try {
-      // 1. Send Image to AI (Replace path with your actual local folder path)
-      const aiResponse = await axios.post('http://localhost:5000/api/analyze', {
-        imagePath: "C:/Users/HP/OneDrive/Desktop/DisasterProject/dataset/test/Flood/" + selectedFile.name
+      // Create FormData for file upload
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('location', formData.location);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('image', selectedFile);
+
+      // Submit report with file upload and AI analysis
+      const response = await axios.post('http://localhost:5000/api/report', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
       
-      const prediction = aiResponse.data.ai_result;
-      setAiResult(prediction);
-
-      // 2. Submit Report
-      const reportData = {
-        ...formData,
-        image_url: selectedFile.name,
-        disaster_type: prediction,
-        status: "Under Review"
-      };
-
-      await axios.post('http://localhost:5000/api/report', reportData);
+      setAiResult(response.data.ai_result);
       alert("✅ Report Submitted! AI Analysis Complete.");
+      
+      // Reset form
+      setFormData({ title: '', location: '', description: '' });
+      setSelectedFile(null);
       
     } catch (err) {
       console.error(err);

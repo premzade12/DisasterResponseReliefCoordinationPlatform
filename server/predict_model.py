@@ -56,6 +56,12 @@ def predict_disaster(image_path):
     print(f"--------------------------------")
 
 # --- RUN THE PREDICTION ---
-# Change this filename if your image is named something else!
-image_filename = 'test_image.jpg' 
+import sys
+
+if len(sys.argv) > 1:
+    image_filename = sys.argv[1]
+else:
+    # Fallback to test image if no argument provided
+    image_filename = '../test_image.jpg'
+
 predict_disaster(image_filename)

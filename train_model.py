@@ -11,7 +11,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 # --- SETTINGS ---
 IMG_WIDTH, IMG_HEIGHT = 128, 128
 BATCH_SIZE = 32
-EPOCHS = 15                 # We will run 15 rounds of training
+EPOCHS = 20                 # We will run 20 rounds of training for better accuracy
 DATASET_PATH = 'dataset'    # This matches your folder name
 
 # --- STEP 1: LOAD AND PROCESS IMAGES ---
@@ -34,7 +34,7 @@ train_set = train_datagen.flow_from_directory(
     directory=os.path.join(DATASET_PATH, 'train'),
     target_size=(IMG_WIDTH, IMG_HEIGHT),
     batch_size=BATCH_SIZE,
-    class_mode='categorical' # 'categorical' because we have 4 classes (Cyclone, Flood, etc)
+    class_mode='categorical' # 'categorical' because we have multiple classes including Normal
 )
 
 # Load Test Set
